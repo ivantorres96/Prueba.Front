@@ -1,0 +1,103 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div class="container">
+    <h1>Tareas</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row text-center">
+                <div class="col-md-4 col-sm-12 mb-2">
+                    <button @onclick=BtnRegisterTask class="btn btn-outline-primary">@textBtnFormulario</button>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <select class="form-control mb-2" @bind=stateId>
+                        <option>Seleccione un estado</option>
+                        @foreach (var element in States)
+                        {
+                            <option value="@element.Id">@element.Name</option>
+                        }
+                    </select>
+
+                    @if (flagMenssageErrorSearch)
+                    {
+                        <label style="width:100%; color:red;">Debes seleccionar un estado</label>
+                    }
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <button type="button" class="btn btn-outline-secondary" @onclick=BtnFilterTask>Buscar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (flagFormulario)
+            {
+                <form @onsubmit=OnSumitTask>
+                    <input class="form-control mb-2" @bind-value=TaskDto.Name type="text" placeholder="Nombre" required />
+                    <input class="form-control mb-2" @bind-value=TaskDto.Description type="text" placeholder="Descripción" required />
+                    <input class="form-control mb-2" @bind-value=TaskDto.Priority type="text" placeholder="prioridad" required />
+                    <select class="form-control mb-2" @bind=TaskDto.StateId>
+                        <option>Seleccione un estado</option>
+                        @foreach (var element in States)
+                        {
+                            <option value="@element.Id">@element.Name</option>
+                        }
+                    </select>
+
+                    @if (flagMenssageError)
+                    {
+                        <label style="width:100%; color:red;">Debes seleccionar un estado</label>
+                    }
+                    @* <input @bind-value=TaskDto.File type="file" required/> *@
+
+                    <button type="submit" class="btn btn-outline-primary">Enviar</button>
+                </form>
+            }
+
+            <table class="table table-info mb-2">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Prioridad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var element in TaskListFilter)
+                    {
+                        <tr>
+                            <td>@element.Name</td>
+                            <td>@element.Description</td>
+                            <td>@element.Priority</td>
+                            <td>
+                                <button @onclick=@(() => BtnUpdate(element)) class="btn btn-outline-primary">Editar</button>
+                                <button @onclick=@(() => BtnDelete(element)) class="btn btn-outline-danger">Eliminar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <h1>Analicis</h1>
+
+            <table class="table table-info mb-2">
+                <thead>
+                    <tr>
+                        <th>to do</th>
+                        <th>in progress</th>
+                        <th>done</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@TaskSumDto.uno</td>
+                        <td>@TaskSumDto.dos</td>
+                        <td>@TaskSumDto.tres</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
